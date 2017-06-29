@@ -5,7 +5,7 @@ Create a Redux reducer from an array of action handlers.
 
 ## Usage
 
-```
+```javascript
 const redeuceur = require('redeuceur');
 
 const initialState = [];
