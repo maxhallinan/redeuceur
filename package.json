@@ -1,11 +1,31 @@
 {
   "name": "redeuceur",
   "version": "0.1.0",
-  "description": "",
+  "description": "Create a Redux reducer from an array of action handlers.",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxhallinan/redeuceur"
+  },
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src -d dist",
+    "dev": "babel src -w -d dist",
+    "lint": "./node_modules/.bin/eslint src",
+    "prepublishOnly": "npm run lint && npm run test && npm run build",
+    "test": "mocha",
+    "test-dev": "mocha --watch"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Max Hallinan",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.0.2",
+    "eslint": "^4.1.1",
+    "mocha": "^3.4.2"
+  },
+  "keywords": [
+    "redux",
+    "reducer"
+  ]
 }
