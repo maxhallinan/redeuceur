@@ -6,19 +6,23 @@ Create a Redux reducer from an array of action handlers.
 ## Usage
 
 ```javascript
-const redeuceur = require('redeuceur');
+import redeuceur from 'redeuceur';
 
-const initialState = [];
+const initialState = {};
 
 const handlers = [
-  { 
-    handler: action => action.foo,
-    test: ActionTypes.CREATE_FOO,
-  },
-  {
-    handler: (action, state) => Object.assign({}, state, action.foo),
-    test: (action, state) => action.type === ActionTypes.UPDATE_FOO && !state.isBar,
-  },
+  [
+    ActionTypes.CREATE_FOO,
+    action => action.foo,
+  ],
+  [
+    [ ActionTypes.RESET_FOO, ActionTypes.DELETE_FOO, ],
+    () => ({}),
+  ],
+  [
+    (state, action) => action.type === ActionTypes.UPDATE_FOO && !state.isBar,
+    (state, action) => Object.assign({}, state, action.foo),
+  ],
 ];
 
 const foo = redeuceur(initialState, handlers);
