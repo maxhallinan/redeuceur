@@ -16,8 +16,8 @@ const handlers = [
     action => action.foo,
   ],
   [
-    [ ActionTypes.RESET_FOO, ActionTypes.DELETE_FOO, ],
-    () => ({}),
+    [ ActionTypes.DELETE_FOO, ActionTypes.RESET_FOO, ],
+    {},
   ],
   [
     (state, action) => action.type === ActionTypes.UPDATE_FOO && !state.isBar,
