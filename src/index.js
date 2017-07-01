@@ -1,6 +1,10 @@
 const { 
+  identity,
+  includes,
   isArray, 
+  isFunction,
   isOneOfTypes,
+  isString,
 } = require(`./util.js`);
 
 function validateHandler(handler, index) {
@@ -23,31 +27,33 @@ function validateHandler(handler, index) {
   }
 }
 
-function redeuceur(...args) {
-  let [ initialState, handlers, ] = args;
+const defaultHandler = [ () => true, identity, ];
 
-  if (args.length < 2) {
-    throw new Error(
-      `redeuceur must be called with two arguments: initialState and handlers.`
-    ); 
-  }
-
-  if (!isArray(handlers)) {
-    throw new TypeError(
-      `Invalid argument. handlers must be an array.`
-    );
-  }
-
-  // for convenience, redeuceur accepts a single handler
-  // e.g., `redeuceur(initialState, ['ACTION_TYPE', handleActionType])`
-  if (!isArray(handlers[0])) {
-    handlers = [ handlers, ]; 
-  }
-
+function redeuceur(initialState, ...handlers) {
   handlers.forEach(validateHandler);
 
-  return function () {
-    return initialState; 
+  handlers = [ ...handlers, defaultHandler, ];
+
+  return function (state = initialState, action = {}) {
+    const handler = handlers.find(([ condition, ]) => {
+      if (isString(condition)) {
+        return condition === action.type;
+      }
+
+      if (isArray(condition)) {
+        return includes(action.type, condition);
+      }
+
+      if (isFunction(condition)) {
+        return condition(state, action);
+      }
+    });
+
+    const nextState = isFunction(handler[1]) 
+      ? handler[1](state, action) 
+      : handler[1];
+
+    return nextState;
   };
 }
 

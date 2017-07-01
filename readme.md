@@ -25,7 +25,7 @@ const handlers = [
   ],
 ];
 
-const foo = redeuceur(initialState, handlers);
+const foo = redeuceur(initialState, ...handlers);
 ```
 
 
