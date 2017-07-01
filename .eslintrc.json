@@ -31,6 +31,9 @@
             "capIsNew": false
           }
         ],
+        "no-console": [
+          "warn"
+        ],
         "no-self-compare": 1,
         "object-curly-spacing": [
           "error",
@@ -38,7 +41,7 @@
         ],
         "quotes": [
             "error",
-            "single"
+            "backtick"
         ],
         "semi": [
             "error",

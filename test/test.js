@@ -2,16 +2,16 @@ const assert = require('chai').assert;
 const redeuceur = require('../dist');
 
 describe('unit > redeuceur', function () {
-  describe('type signature', function () {
+  describe('> type signature', function () {
     it('Throws an Error if called without two arguments.', function () {
-      const errMsg = 'Must be called with two arguments: initialState and handlers.';
+      const errMsg = 'redeuceur must be called with two arguments: initialState and handlers.';
 
       assert.throws(() => { redeuceur(); }, Error, errMsg);
       assert.throws(() => { redeuceur(true); }, Error, errMsg);
     });
 
     it('Throws a TypeError if handlers is not an array.', function () {
-      const errMsg = 'Handlers must be an array.';
+      const errMsg = 'Invalid argument. handlers must be an array.';
       const invalid = [true, 1, 'a', {}, () => {}, null];
 
       invalid.forEach(x => {
@@ -20,14 +20,16 @@ describe('unit > redeuceur', function () {
     });
 
     it('Throws a TypeError if a handler is not an array.', function () {
-      const errMsg = 'Invalid handler. Every handler must be an array with a type and a nextState.';
+      const errMsg = index =>
+        `Invalid handler at index ${index}. ` + 
+        `Every handler must have a condition and a nextState.`; 
       const invalid = [true, 1, 'a', {}, () => {}, null];
 
       invalid.forEach(x => {
         // one invalid handler
         assert.throws(() => { 
           redeuceur(true, [ x, ]); 
-        }, TypeError, errMsg);
+        }, Error, errMsg(0));
 
         // mix of invalid and valid handlers
         assert.throws(() => { 
@@ -38,12 +40,14 @@ describe('unit > redeuceur', function () {
           ];
 
           redeuceur(true, handlers);
-        }, TypeError, errMsg);
+        }, Error, errMsg(1));
       });
     });
 
     it('Throws an Error if a handler does not have a condition and a nextState.', function () {
-      const errMsg = 'Each handler must have a type and a nextState.';
+      const errMsg = 
+        'Invalid handler at index 0. ' + 
+        'Every handler must have a condition and a nextState.';
 
       assert.throws(() => { redeuceur(true, []); }, Error, errMsg);
       assert.throws(() => { redeuceur(true, [[]]); }, Error, errMsg);
@@ -52,14 +56,16 @@ describe('unit > redeuceur', function () {
     });
 
     it('Throws a TypeError if a condition is not a valid type.', function () {
-      const errMsg = 'Invalid handler. Expected a string, an array of strings, or a function.';
+      const errMsg = 
+        'Invalid handler condition at index 0. ' + 
+        'A handler condition must be a string, an array of strings, or a function.';
       const handler = () => ({});
-      const invalid = [true, 1, {}, () => {}, null];
+      const invalid = [true, 1, {}, null];
 
       invalid.forEach(x => {
         assert.throws(() => { 
           redeuceur(true, [x, handler]);
-        }, Error, errMsg);
+        }, TypeError, errMsg);
       });
     });
 
@@ -68,7 +74,7 @@ describe('unit > redeuceur', function () {
     });
   });
 
-  describe('reducer function', function () {
+  describe('> reducer function', function () {
     let actionBar;
     let actionBaz;
     let actionQux;
