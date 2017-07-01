@@ -1,19 +1,17 @@
 const assert = require('chai').assert;
 const redeuceur = require('../dist');
 
-describe('unit > createReducer', function () {
+describe('unit > redeuceur', function () {
   describe('type signature', function () {
     it('Throws an Error if called without two arguments.', function () {
-      const errMsg = 
-        'Must be called with two arguments: ' +
-        'initialState and cases.';
+      const errMsg = 'Must be called with two arguments: initialState and handlers.';
 
       assert.throws(() => { redeuceur(); }, Error, errMsg);
       assert.throws(() => { redeuceur(true); }, Error, errMsg);
     });
 
-    it('Throws a TypeError if cases is not an array.', function () {
-      const errMsg = 'Cases must be an array.';
+    it('Throws a TypeError if handlers is not an array.', function () {
+      const errMsg = 'Handlers must be an array.';
       const invalid = [true, 1, 'a', {}, () => {}, null];
 
       invalid.forEach(x => {
@@ -21,39 +19,40 @@ describe('unit > createReducer', function () {
       });
     });
 
-    it('Throws a TypeError if a case is not an array.', function () {
-      const errMsg = 'Invalid case in cases. Each case must be an array.';
+    it('Throws a TypeError if a handler is not an array.', function () {
+      const errMsg = 'Invalid handler. Every handler must be an array with a type and a nextState.';
       const invalid = [true, 1, 'a', {}, () => {}, null];
 
       invalid.forEach(x => {
-        // one invalid case
+        // one invalid handler
         assert.throws(() => { 
           redeuceur(true, [ x, ]); 
         }, TypeError, errMsg);
 
-        // mix of invalid and valid cases
+        // mix of invalid and valid handlers
         assert.throws(() => { 
-          const cases = [
+          const handlers = [
             ['foo', true],
             x,
             ['bar', false],
           ];
 
-          redeuceur(true, cases);
+          redeuceur(true, handlers);
         }, TypeError, errMsg);
       });
     });
 
-    it('Throws an Error if a case does not have a test and a handler.', function () {
-      const errMsg = 'Each case must have a test and a handler.';
+    it('Throws an Error if a handler does not have a condition and a nextState.', function () {
+      const errMsg = 'Each handler must have a type and a nextState.';
 
+      assert.throws(() => { redeuceur(true, []); }, Error, errMsg);
       assert.throws(() => { redeuceur(true, [[]]); }, Error, errMsg);
       assert.throws(() => { redeuceur(true, [['a']]); }, Error, errMsg);
 
     });
 
-    it('Throws a TypeError if a case is not a valid type.', function () {
-      const errMsg = 'Invalid case. Expected a string, an array of strings, or a function.';
+    it('Throws a TypeError if a condition is not a valid type.', function () {
+      const errMsg = 'Invalid handler. Expected a string, an array of strings, or a function.';
       const handler = () => ({});
       const invalid = [true, 1, {}, () => {}, null];
 
@@ -70,17 +69,131 @@ describe('unit > createReducer', function () {
   });
 
   describe('reducer function', function () {
-    it('Takes two arguments.', function () {});
-    it('Returns the initial state if called without an action argument.', function () {});
-    it('Matches a string case against the action type.', function () {});
-    it('Matches an array of string cases against the action type.', function () {});
-    it('Calls a case function with the state and action.', function () {});
-    it('Calls the handler if the case function returns a truthy value.', function () {});
-    it('Does not call the handler if the case function returns a falsey value.', function () {});
-    it('Returns the result of the called case handler.', function () {});
-    it('Returns the handler value if the handler is not a function.', function () {});
-    it('Returns state if there\'s no case match.', function () {});
-    it('Memoizes the case handler.', function () {});
+    let actionBar;
+    let actionBaz;
+    let actionQux;
+    let actionTypes;
+    let initialState;
+
+    before(function () {
+      actionTypes = {
+        FOO: 'FOO',
+        BAR: 'BAR',
+        BAZ: 'BAZ',
+        QUX: 'QUX',
+      };
+
+      const qux = 'qux';
+
+      actionFoo = { type: actionTypes.FOO, qux, };
+      actionBar = { type: actionTypes.BAR, qux, };
+      actionBaz = { type: actionTypes.BAZ, qux, };
+
+      initialState = null;
+    });
+
+    it('Takes two arguments.', function () {
+      const handler = [actionTypes.FOO, true];
+      const reducer = redeuceur(initialState, handler);
+
+      assert.strictEqual(reducer.length, 2);
+    });
+
+    it('Returns the initial state if called without an action argument.', function () {
+      const handler = [actionTypes.FOO, true];
+      const reducer = redeuceur(initialState, handler);
+    
+      assert.deepEqual(reducer(), initialState);
+    });
+
+    it('Matches a string condition against the action type.', function () {
+      const handler = [ 
+        actionTypes.FOO, 
+        (state, action) => action.qux, 
+      ];
+
+      const reducer = redeuceur(initialState, handler);
+
+      assert.strictEqual(actionFoo.qux, reducer(initialState, actionFoo));
+    });
+
+    it('Matches an array of string conditions against the action type.', function () {
+      const handler = [
+        [ actionTypes.BAR, actionTypes.BAZ, ],
+        (state, action) => action.qux,
+      ];
+      const reducer = redeuceur(initialState, handler);
+
+      assert.strictEqual(reducer(initialState, actionBar), actionBar.qux);
+      assert.strictEqual(reducer(initialState, actionBaz), actionBaz.qux);
+      assert.strictEqual(reducer(initialState, actionQux), initialState);
+    });
+
+    it('Returns nextState if the condition function returns a truthy value.', function () {
+      const handler = [
+        (state, action) => action.type === actionTypes.FOO,
+        (state, action) => action.qux,
+      ];
+
+      const reducer = redeucer(initialState, handler);
+      
+      assert.strictEqual(reducer(initialState, actionFoo), actionFoo.qux);
+    });
+
+    it('Does not return nextState if the condition function returns a falsey value.', function () {
+      const handler = [
+        (state, action) => action.type === actionTypes.BAR,
+        (state, action) => action.qux,
+      ];
+
+      const reducer = redeucer(initialState, handler);
+      
+      assert.strictEqual(reducer(initialState, actionFoo), initialState);
+    });
+    
+    it('Returns the result of calling nextState if nextState is a function.', function () {
+      const handler = [
+        actionTypes.FOO,
+        (state, action) => action.qux,
+      ];
+
+      const reducer = redeuceur(initialState, handler);
+
+      assert.strictEqual(reducer(initialState, actionFoo));
+    });
+
+    it('Returns the nextState value if nextState is not a function.', function () {
+      const nextState = 'foo bar baz';
+
+      const handler = [
+        actionTypes.FOO, 
+        nextState,
+      ]; 
+
+      const reducer = redeuceur(initialState, handler);
+
+      assert.strictEqual(redeucer(initialState, actionFoo), nextState);
+    });
+
+    it('Returns the current state if there\'s no condition match.', function () {
+      const state = 'foo bar baz';
+      const getQux = (state, action) => action.qux;
+
+      const handlers = [
+        [ actionTypes.FOO, getQux, ],
+        [ actionTypes.BAR, getQux, ],
+        [ actionTypes.BAZ, getQux, ],
+      ];
+
+      const actionQux = { type: actionTypes.QUX, qux: 'qux', };
+       
+      const reducer = redeuceur(initialState, handlers);
+
+      assert.strictEqual(reducer(state, actionQux), state);
+    });
+
+    it('Memoizes the handler condition.', function () {});
+
     it('Memoizes the reducer call.', function () {});
   });
 });
