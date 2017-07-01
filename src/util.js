@@ -1,5 +1,7 @@
 const _ = module.exports;
 
+_.compose = (a, b) => x => a(b(x));
+
 _.identity = x => x;
 
 _.includes = (x, arr) => arr.indexOf(x) > -1;
@@ -20,3 +22,4 @@ _.typeOf = x  => (
     .match(/\s([a-z|A-Z]+)/)[1]
     .toLowerCase()
 );
+

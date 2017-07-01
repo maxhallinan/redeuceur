@@ -1,4 +1,5 @@
 const { 
+  compose,
   identity,
   includes,
   isArray, 
@@ -7,30 +8,34 @@ const {
   isString,
 } = require(`./util.js`);
 
-function validateHandler(handler, index) {
+function validateHandler(handler) {
   if (!isArray(handler) || handler.length < 2) {
     throw new Error(
-      `Invalid handler at index ${index}. ` + 
-      `Every handler must have a condition and a nextState.`
+      `Invalid handler. Every handler must have a condition and a nextState.`
     ); 
   } 
 
-  const condition = handler[0];
+  return handler;
+}
+
+function validateCondition(handler) {
   const validTypes = [ `array`, `function`, `string`, ];
-  const isValidCondition = isOneOfTypes(validTypes, condition);
+  const isValidCondition = isOneOfTypes(validTypes, handler[0]);
 
   if (!isValidCondition) {
     throw new TypeError(
-      `Invalid handler condition at index ${index}. ` + 
-      `A handler condition must be a string, an array of strings, or a function.`
+      `Invalid handler condition. ` +
+      `A condition must be a string, an array of strings, or a function.`
     );
   }
+
+  return handler;
 }
 
 const defaultHandler = [ () => true, identity, ];
 
 function redeuceur(initialState, ...handlers) {
-  handlers.forEach(validateHandler);
+  handlers.forEach(compose(validateCondition, validateHandler));
 
   handlers = [ ...handlers, defaultHandler, ];
 
