@@ -1,7 +1,7 @@
 {
   "name": "redeuceur",
   "version": "0.1.0",
-  "description": "Create a Redux reducer from an array of action handlers.",
+  "description": "A utility for creating terse Redux reducers.",
   "license": "ISC",
   "repository": {
     "type": "git",
