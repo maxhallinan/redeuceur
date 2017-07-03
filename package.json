@@ -15,8 +15,8 @@
     "dev": "rollup -c -w",
     "lint": "./node_modules/.bin/eslint src test",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
-    "test": "npm run build && npm run lint && mocha",
-    "test:watch": "mocha --watch"
+    "test": "npm run build && npm run lint && mocha test/**/*.js",
+    "test:watch": "mocha test/**/*.js --watch"
   },
   "author": {
     "name": "Max Hallinan",

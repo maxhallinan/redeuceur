@@ -1,5 +1,5 @@
 const assert = require(`chai`).assert;
-const redeuceur = require(`../dist`);
+const redeuceur = require(`../../dist`);
 
 const handlerErr = 
   `Invalid handler. Every handler must have a condition and a nextState.`;
