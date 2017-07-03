@@ -2,30 +2,44 @@
   "name": "redeuceur",
   "version": "0.1.0",
   "description": "A utility for creating terse Redux reducers.",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/maxhallinan/redeuceur"
   },
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "unpkg": "dist/index.js",
   "scripts": {
-    "build": "babel src -d dist",
-    "dev": "babel src -w -d dist",
+    "build": "rm -rf dist && rollup -c",
+    "dev": "rollup -c -w",
     "lint": "./node_modules/.bin/eslint src test",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "test": "npm run build && npm run lint && mocha",
-    "test-dev": "mocha --watch"
+    "test:watch": "mocha --watch"
   },
-  "author": "Max Hallinan",
+  "author": {
+    "name": "Max Hallinan",
+    "email": "maxhallinan@riseup.net"
+  },
+  "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
+    "babelrc-rollup": "^3.0.0",
     "chai": "^4.0.2",
     "eslint": "^4.1.1",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "redux": "^3.7.1",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-watch": "^4.0.0"
   },
   "keywords": [
     "redux",
     "reducer"
+  ],
+  "files": [
+    "dist"
   ]
 }

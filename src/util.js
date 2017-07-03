@@ -1,22 +1,20 @@
-const _ = module.exports;
+export const compose = (a, b) => x => a(b(x));
 
-_.compose = (a, b) => x => a(b(x));
+export const identity = x => x;
 
-_.identity = x => x;
+export const includes = (x, arr) => arr.indexOf(x) > -1;
 
-_.includes = (x, arr) => arr.indexOf(x) > -1;
+export const isArray = x => typeOf(x) === `array`;
 
-_.isArray = x => _.typeOf(x) === `array`;
+export const isFunction = x => typeOf(x) === `function`; 
 
-_.isFunction = x => _.typeOf(x) === `function`; 
+export const isString = x => typeOf(x) === `string`; 
 
-_.isString = x => _.typeOf(x) === `string`; 
+export const isOneOfTypes = (types, x) => includes(typeOf(x), types);
 
-_.isOneOfTypes = (types, x) => _.includes(_.typeOf(x), types);
+export const log = (...logs) => x => console.log(...logs, x) || x;
 
-_.log = (...logs) => x => console.log(...logs, x) || x;
-
-_.typeOf = x  => (
+export const typeOf = x  => (
   ({}).toString
     .call(x)
     .match(/\s([a-z|A-Z]+)/)[1]

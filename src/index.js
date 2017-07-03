@@ -1,4 +1,4 @@
-const { 
+import { 
   compose,
   identity,
   includes,
@@ -6,7 +6,7 @@ const {
   isFunction,
   isOneOfTypes,
   isString,
-} = require(`./util.js`);
+} from './util.js';
 
 function validateHandler(handler) {
   if (!isArray(handler) || handler.length < 2) {
@@ -62,5 +62,5 @@ function redeuceur(initialState, ...handlers) {
   };
 }
 
-module.exports = redeuceur;
+export default redeuceur;
 

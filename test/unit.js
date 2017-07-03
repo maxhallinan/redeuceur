@@ -159,13 +159,5 @@ describe(`unit > redeuceur`, function () {
 
     assert.strictEqual(reducer(state, actionQux), state);
   });
-
-  it(`Memoizes the handler condition.`, function () {
-    assert.strictEqual(true, false);
-  });
-
-  it(`Memoizes the reducer call.`, function () {
-    assert.strictEqual(true, false);
-  });
 });
 
