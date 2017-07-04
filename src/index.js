@@ -24,8 +24,8 @@ function validateCondition(handler) {
 
   if (!isValidCondition) {
     throw new TypeError(
-      `Invalid handler condition. ` +
-      `A condition must be a string, an array of strings, or a function.`
+      `Invalid handler condition. A condition must be ` +
+      `a string, an array of strings, or a function.`
     );
   }
 

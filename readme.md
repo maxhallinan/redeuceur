@@ -6,6 +6,13 @@
 A utility for creating terse Redux reducers. 
 
 
+## Install
+
+```bash
+$ npm install --save redeuceur
+```
+
+
 ## Usage
 
 ```javascript
