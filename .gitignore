@@ -2,4 +2,6 @@
 coverage
 coverage.lcov
 dist
+es
+lib
 node_modules

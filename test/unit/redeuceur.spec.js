@@ -1,5 +1,5 @@
-const assert = require(`chai`).assert;
-const redeuceur = require(`../../dist`);
+import { assert, } from 'chai';
+import redeuceur from '../../src';
 
 const handlerErr = 
   `Invalid handler. Every handler must have a condition and a nextState.`;

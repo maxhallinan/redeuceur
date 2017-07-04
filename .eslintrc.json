@@ -37,7 +37,7 @@
           }
         ],
         "no-console": [
-          "warn"
+          "error"
         ],
         "no-self-compare": 1,
         "object-curly-spacing": [

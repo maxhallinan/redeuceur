@@ -12,7 +12,9 @@ export const isString = x => typeOf(x) === `string`;
 
 export const isOneOfTypes = (types, x) => includes(typeOf(x), types);
 
+/* eslint-disable no-console */
 export const log = (...logs) => x => console.log(...logs, x) || x;
+/* eslint-enable no-console */
 
 export const typeOf = x  => (
   ({}).toString
