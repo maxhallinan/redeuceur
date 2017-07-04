@@ -1,6 +1,7 @@
 # redeuceur
 
 [![Build Status](https://travis-ci.org/maxhallinan/redeuceur.svg?branch=master)](https://travis-ci.org/maxhallinan/redeuceur)
+[![Coverage Status](https://coveralls.io/repos/github/maxhallinan/redeuceur/badge.svg?branch=master)](https://coveralls.io/github/maxhallinan/redeuceur?branch=master)
 
 A utility for creating terse Redux reducers. 
 
