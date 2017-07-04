@@ -41,17 +41,21 @@ function redeuceur(initialState, ...handlers) {
 
   return function (state = initialState, action = {}) {
     const handler = handlers.find(([ condition, ]) => {
+      let isHandler = false;
+
       if (isString(condition)) {
-        return condition === action.type;
+        isHandler = condition === action.type;
       }
 
       if (isArray(condition)) {
-        return includes(action.type, condition);
+        isHandler = includes(action.type, condition);
       }
 
       if (isFunction(condition)) {
-        return condition(state, action);
+        isHandler = condition(state, action);
       }
+
+      return isHandler;
     });
 
     const nextState = isFunction(handler[1]) 

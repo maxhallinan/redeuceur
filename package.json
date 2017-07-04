@@ -23,7 +23,6 @@
     "lint": "./node_modules/.bin/eslint src test",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "cross-env NODE_ENV=test BABEL_ENV=test nyc mocha 'test/**/*.spec.js'",
-    "test:coverage": "cross-env NODE_ENV=test BABEL_ENV=test nyc npm run test",
     "test:watch": "mocha test/**/*.js --watch"
   },
   "author": {
