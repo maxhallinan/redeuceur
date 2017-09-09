@@ -25,7 +25,7 @@ const handlers = [
     // handle a single action type
     ActionTypes.CREATE_FOO,
     // return the next state
-    action => action.foo,
+    (state, action) => action.foo,
   ],
   [
     // handle one of many action types
