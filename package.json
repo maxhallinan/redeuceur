@@ -1,6 +1,6 @@
 {
   "name": "redeuceur",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A utility for creating terse Redux reducers.",
   "license": "MIT",
   "repository": {
